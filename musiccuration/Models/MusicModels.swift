@@ -115,7 +115,7 @@ enum SampleData {
       weekIndex: 8,
       accent: sticker.accent,
       character: sticker,
-      artworkName: nil,
+      artworkName: String(format: "VinylLabel%02d", index + 1),
       sourceURL: nil
     )
   }

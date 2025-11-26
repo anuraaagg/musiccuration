@@ -1,4 +1,5 @@
 {
     "sweetpad.workspacePath": "musiccuration.xcodeproj",
-    "sweetpad.scheme": "musiccuration"
+    "sweetpad.scheme": "musiccuration",
+    "sweetpad.destination": "platform=iOS Simulator,id=32AE4C85-6A02-4EFE-A960-7C503664BEC2"
 }

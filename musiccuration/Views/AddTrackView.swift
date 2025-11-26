@@ -14,52 +14,121 @@ struct AddTrackView: View {
   var onCancel: () -> Void
   var onEngrave: () -> Void
 
+  @State private var isEngraving: Bool = false
+
   var body: some View {
-    VStack(spacing: 28) {
-      Capsule()
-        .fill(Color.gray.opacity(0.3))
-        .frame(width: 60, height: 6)
-        .padding(.top, 12)
+    ZStack {
+      // Background Gradient
+      LinearGradient(
+        colors: [
+          Color(UIColor.systemBackground),
+          Color(UIColor.secondarySystemBackground),
+        ],
+        startPoint: .top,
+        endPoint: .bottom
+      )
+      .ignoresSafeArea()
 
-      Text("Add today's track")
-        .font(.system(.title3, design: .rounded))
-        .fontWeight(.semibold)
+      VStack(spacing: 32) {
+        Spacer()
 
-      VStack(spacing: 16) {
-        FloatingField("Song title", text: $title)
-        FloatingField("Artist", text: $artist)
-        FloatingField("Link or URL (optional)", text: $link)
-      }
-      .padding(.horizontal, 24)
+        // Title
+        Text("Engrave Today's Song")
+          .font(.system(size: 28, weight: .bold))
 
-      VinylPlaceholder()
-        .frame(width: 220, height: 220)
+        // Blank Vinyl Preview
+        VinylPlaceholder()
+          .frame(width: 240, height: 240)
+          .scaleEffect(isEngraving ? 1.1 : 1.0)
+          .animation(.easeInOut(duration: 1.5), value: isEngraving)
 
-      Button(action: onEngrave) {
-        Text("Press to engrave")
-          .font(.system(.headline, design: .rounded))
-          .frame(maxWidth: .infinity)
-          .padding()
-          .background(
-            RoundedRectangle(cornerRadius: 22, style: .continuous)
-              .fill(title.isEmpty ? Color.gray.opacity(0.3) : Color.black)
-          )
-          .foregroundStyle(title.isEmpty ? .secondary : Color.white)
-      }
-      .disabled(title.isEmpty)
-      .padding(.horizontal, 32)
+        // Input Section
+        VStack(spacing: 24) {
+          VStack(alignment: .leading, spacing: 16) {
+            Text("Song Details")
+              .font(.system(size: 14, weight: .medium))
 
-      Spacer()
-    }
-    .frame(maxWidth: .infinity, maxHeight: .infinity)
-    .background(Material.ultraThin)
-    .gesture(
-      DragGesture()
-        .onEnded { value in
-          if value.translation.height > 120 {
-            onCancel()
+            VStack(spacing: 12) {
+              TextField("Song title", text: $title)
+                .padding(16)
+                .background(
+                  RoundedRectangle(cornerRadius: 12)
+                    .fill(.ultraThinMaterial)
+                )
+
+              TextField("Artist", text: $artist)
+                .padding(16)
+                .background(
+                  RoundedRectangle(cornerRadius: 12)
+                    .fill(.ultraThinMaterial)
+                )
+
+              TextField("Link or URL (optional)", text: $link)
+                .padding(16)
+                .background(
+                  RoundedRectangle(cornerRadius: 12)
+                    .fill(.ultraThinMaterial)
+                )
+            }
           }
+          .padding(24)
+          .background(
+            RoundedRectangle(cornerRadius: 16)
+              .fill(.ultraThinMaterial)
+          )
+
+          // Engrave Button
+          Button(action: handleEngrave) {
+            Text(isEngraving ? "Engraving..." : "Press to Engrave")
+              .font(.system(size: 18, weight: .semibold))
+              .foregroundColor(.white)
+              .frame(maxWidth: .infinity)
+              .frame(height: 56)
+              .background(
+                RoundedRectangle(cornerRadius: 14)
+                  .fill(Color(red: 0.96, green: 0.47, blue: 0.42))
+              )
+          }
+          .disabled(title.isEmpty || isEngraving)
+          .opacity(title.isEmpty || isEngraving ? 0.5 : 1.0)
         }
-    )
+        .padding(.horizontal, 24)
+
+        // Hint
+        VStack(spacing: 4) {
+          Text("Choose the song that represents your day.")
+          Text("You can only pick one.")
+        }
+        .font(.system(size: 14))
+        .foregroundColor(.secondary)
+        .multilineTextAlignment(.center)
+
+        Spacer()
+      }
+
+      // Close Button
+      VStack {
+        HStack {
+          Spacer()
+          Button(action: onCancel) {
+            Image(systemName: "xmark")
+              .font(.system(size: 20))
+              .foregroundColor(.primary)
+              .frame(width: 40, height: 40)
+              .background(Circle().fill(.ultraThinMaterial))
+          }
+          .padding(24)
+        }
+        Spacer()
+      }
+    }
+  }
+
+  func handleEngrave() {
+    isEngraving = true
+    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+      onEngrave()
+      isEngraving = false
+    }
   }
 }

@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+// MARK: - Glass Player (Main Component)
+
 struct WaveformPlayerBar: View {
   @Binding var progress: CGFloat
   @Binding var isPlaying: Bool
@@ -15,44 +17,101 @@ struct WaveformPlayerBar: View {
   var onScrub: (CGFloat) -> Void
 
   var body: some View {
-    HStack(spacing: 18) {
+    HStack(spacing: 16) {
+      // Album Artwork
       ZStack {
         Circle()
-          .fill(Color.white.opacity(0.6))
-        Group {
-          if let name = artworkName {
-            Image(name)
-              .resizable()
-              .scaledToFill()
-          }
+          .fill(accent.opacity(0.3))
+
+        if let name = artworkName {
+          Image(name)
+            .resizable()
+            .scaledToFill()
+            .clipShape(Circle())
         }
       }
-      .frame(width: 50, height: 50)
-      .clipShape(Circle())
-      .overlay(Circle().stroke(Color.white.opacity(0.25), lineWidth: 1))
+      .frame(width: 56, height: 56)
+      .overlay(
+        Circle()
+          .stroke(Color.white.opacity(0.3), lineWidth: 2)
+      )
+      .shadow(color: .black.opacity(0.1), radius: 8, x: 0, y: 4)
 
-      Waveform(progress: $progress, isPlaying: $isPlaying, accent: accent, onScrub: onScrub)
-
-      Button {
-        // share stub
-      } label: {
-        Image(systemName: "square.and.arrow.up")
-          .font(.system(size: 18, weight: .semibold))
-          .foregroundStyle(.secondary)
-      }
+      // Waveform
+      Waveform(
+        progress: $progress,
+        isPlaying: $isPlaying,
+        accent: accent,
+        onScrub: onScrub
+      )
     }
-    .padding()
+    .padding(16)
     .background(
-      RoundedRectangle(cornerRadius: 28, style: .continuous)
-        .fill(.thinMaterial)
+      RoundedRectangle(cornerRadius: 24, style: .continuous)
+        .fill(.ultraThinMaterial)
         .overlay(
-          RoundedRectangle(cornerRadius: 28, style: .continuous).stroke(
-            Color.white.opacity(0.25), lineWidth: 1)
+          RoundedRectangle(cornerRadius: 24, style: .continuous)
+            .stroke(Color.white.opacity(0.2), lineWidth: 1)
         )
-        .shadow(color: .black.opacity(0.05), radius: 10, x: 0, y: 10)
+        .shadow(color: .black.opacity(0.08), radius: 20, x: 0, y: 10)
     )
   }
 }
+
+// MARK: - Waveform
+
+struct Waveform: View {
+  @Binding var progress: CGFloat
+  @Binding var isPlaying: Bool
+  var accent: Color
+  var onScrub: (CGFloat) -> Void
+
+  let bars = (0..<30).map { _ in CGFloat.random(in: 0.2...1) }
+
+  var body: some View {
+    GeometryReader { geometry in
+      let width = geometry.size.width
+      ZStack(alignment: .leading) {
+        // Background
+        Capsule()
+          .fill(Color.white.opacity(0.15))
+          .frame(height: 40)
+
+        // Waveform Bars
+        HStack(spacing: 3) {
+          ForEach(0..<bars.count, id: \.self) { index in
+            Capsule()
+              .fill(indexFraction(index) <= progress ? accent : Color.white.opacity(0.3))
+              .frame(width: 3, height: 8 + bars[index] * 28)
+          }
+        }
+        .padding(.horizontal, 10)
+        .frame(height: 40)
+        .contentShape(Rectangle())
+        .gesture(scrubGesture(width: width))
+      }
+      .onTapGesture {
+        isPlaying.toggle()
+      }
+    }
+    .frame(height: 40)
+  }
+
+  private func indexFraction(_ index: Int) -> CGFloat {
+    CGFloat(index) / CGFloat(bars.count - 1)
+  }
+
+  private func scrubGesture(width: CGFloat) -> some Gesture {
+    DragGesture(minimumDistance: 0)
+      .onChanged { value in
+        let position = max(0, min(width, value.location.x))
+        progress = position / width
+        onScrub(0)
+      }
+  }
+}
+
+// MARK: - Play Button (Optional - for future use)
 
 struct PlayButton: View {
   @Binding var isPlaying: Bool
@@ -75,58 +134,12 @@ struct PlayButton: View {
   }
 }
 
-struct Waveform: View {
-  @Binding var progress: CGFloat
-  @Binding var isPlaying: Bool
-  var accent: Color
-  var onScrub: (CGFloat) -> Void
-
-  let bars = (0..<30).map { _ in CGFloat.random(in: 0.2...1) }
-
-  var body: some View {
-    GeometryReader { geometry in
-      let width = geometry.size.width
-      ZStack(alignment: .leading) {
-        Capsule()
-          .fill(Color.white.opacity(0.25))
-          .frame(height: 36)
-
-        HStack(spacing: 4) {
-          ForEach(0..<bars.count, id: \.self) { index in
-            Capsule()
-              .fill(indexFraction(index) <= progress ? accent : Color.white.opacity(0.4))
-              .frame(width: 4, height: 6 + bars[index] * 24)
-          }
-        }
-        .padding(.horizontal, 8)
-        .frame(height: 36)
-        .contentShape(Rectangle())
-        .gesture(scrubGesture(width: width))
-      }
-      .onTapGesture {
-        isPlaying.toggle()
-      }
-    }
-    .frame(height: 36)
-  }
-
-  private func indexFraction(_ index: Int) -> CGFloat {
-    CGFloat(index) / CGFloat(bars.count - 1)
-  }
-
-  private func scrubGesture(width: CGFloat) -> some Gesture {
-    DragGesture(minimumDistance: 0)
-      .onChanged { value in
-        let position = max(0, min(width, value.location.x))
-        progress = position / width
-        onScrub(0)
-      }
-  }
-}
+// MARK: - Progress Ring (Optional - for future use)
 
 struct ProgressRing: View {
   var progress: CGFloat
   var color: Color
+
   var body: some View {
     Circle()
       .trim(from: 0, to: min(1, max(0, progress)))

@@ -22,72 +22,82 @@ struct TodayView: View {
   var onSwipeUp: () -> Void
   var onScrub: (CGFloat) -> Void
 
-  @GestureState private var dragTranslation: CGSize = .zero
-  @GestureState private var rotation: Angle = .degrees(0)
+  @State private var dragOffset: CGSize = .zero
 
   var body: some View {
-    VStack(spacing: 24) {
-      Spacer()
-      VinylDisc(track: track, scratchRotation: scratchRotation + rotation)
-        .padding(.top, 40)
-        .overlay(
-          ProgressRing(progress: progress, color: track.accent)
-            .opacity(0.7)
-            .allowsHitTesting(false)
-        )
-        .gesture(rotationGesture)
-        .onTapGesture(count: 2) { progress = 0 }
-
-      VStack(spacing: 6) {
-        Text(track.title)
-          .font(.system(.title2, design: .rounded))
-          .fontWeight(.semibold)
-        Text("\(track.artist) • Week \(weekNumber)")
-          .font(.callout)
-          .foregroundStyle(.secondary)
-        Text("Day \(dayOfWeek) of 7")
-          .font(.caption)
-          .foregroundStyle(.secondary)
-      }
-
-      WaveformPlayerBar(
-        progress: $progress,
-        isPlaying: $isPlaying,
-        artworkName: track.artworkName,
-        accent: track.accent,
-        onScrub: onScrub
+    ZStack {
+      // Background Gradient
+      LinearGradient(
+        colors: [
+          Color(UIColor.systemBackground),
+          Color(UIColor.secondarySystemBackground)
+        ],
+        startPoint: .top,
+        endPoint: .bottom
       )
-      .padding(.horizontal, 32)
-      .padding(.top, 12)
-      Spacer()
-    }
-    .padding(.bottom, 32)
-    .contentShape(Rectangle())
-    .gesture(verticalSwipeGesture)
-  }
+      .ignoresSafeArea()
 
-  private var verticalSwipeGesture: some Gesture {
-    DragGesture(minimumDistance: 20, coordinateSpace: .local)
-      .updating($dragTranslation) { value, state, _ in
-        state = value.translation
-      }
-      .onEnded { value in
-        if value.translation.height > 80 {
-          onSwipeDown()
-        } else if value.translation.height < -80 {
-          onSwipeUp()
+      VStack(spacing: 48) {
+        Spacer()
+
+        // Vinyl Disc
+        VinylDisc(track: track, scratchRotation: scratchRotation)
+          .frame(width: 280, height: 280)
+          .gesture(
+            DragGesture()
+              .onChanged { value in
+                dragOffset = value.translation
+                // Rotate vinyl based on horizontal drag
+                let rotationDelta = value.translation.width * 0.5
+                scratchRotation = .degrees(scratchRotation.degrees + rotationDelta * 0.1)
+              }
+              .onEnded { value in
+                // Swipe down -> Week View
+                if value.translation.height > 100 {
+                  onSwipeDown()
+                }
+                // Swipe up -> Add Track
+                else if value.translation.height < -100 {
+                  onSwipeUp()
+                }
+                dragOffset = .zero
+              }
+          )
+
+        // Track Info
+        VStack(spacing: 6) {
+          Text(track.title)
+            .font(.system(.title2, design: .rounded))
+            .fontWeight(.semibold)
+          Text("\(track.artist) • Week \(weekNumber)")
+            .font(.callout)
+            .foregroundStyle(.secondary)
+          Text("Day \(dayOfWeek) of 7")
+            .font(.caption)
+            .foregroundStyle(.secondary)
         }
-      }
-  }
 
-  private var rotationGesture: some Gesture {
-    RotationGesture()
-      .updating($rotation) { value, state, _ in
-        state = value
-        onScrub(value.degrees / 360.0)
+        // Player Controls
+        WaveformPlayerBar(
+          progress: $progress,
+          isPlaying: $isPlaying,
+          artworkName: track.artworkName,
+          accent: track.accent,
+          onScrub: onScrub
+        )
+        .padding(.horizontal, 24)
+
+        // Gesture Hints
+        VStack(spacing: 8) {
+          Text("↓ Swipe down for week view")
+          Text("↑ Swipe up to add track")
+          Text("↻ Drag vinyl to scratch")
+        }
+        .font(.system(size: 14))
+        .foregroundColor(.secondary)
+
+        Spacer()
       }
-      .onEnded { value in
-        scratchRotation += value
-      }
+    }
   }
 }
