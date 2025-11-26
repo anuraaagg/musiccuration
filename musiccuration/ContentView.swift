@@ -272,7 +272,7 @@ struct WeekAlbumView: View {
 
     var body: some View {
         VStack(spacing: 24) {
-            Text("Week \(week.number)")
+            Text(String(format: "Week %02d", week.number))
                 .font(.system(.largeTitle, design: .rounded))
                 .fontWeight(.semibold)
             Text(week.dateRange)
@@ -289,14 +289,13 @@ struct WeekAlbumView: View {
             Spacer(minLength: 24)
 
             miniTracksRow
-                .padding(.horizontal, 32)
 
             Spacer(minLength: 24)
 
             HStack {
-                Text("Week \(max(1, week.number - 1))")
+                Text(String(format: "Week %02d", max(1, week.number - 1)))
                 Spacer()
-                Text("Week \(week.number + 1)")
+                Text(String(format: "Week %02d", week.number + 1))
             }
             .font(.headline)
             .foregroundStyle(.secondary)
@@ -311,7 +310,9 @@ struct WeekAlbumView: View {
             ForEach(week.tracks.indices, id: \.self) { index in
                 let miniTrack = week.tracks[index]
                 Button {
-                    selectedDayIndex = index
+                    withAnimation(.spring(response: 0.4, dampingFraction: 0.7)) {
+                        selectedDayIndex = index
+                    }
                 } label: {
                     VinylDisc(track: miniTrack, scratchRotation: .degrees(0))
                         .frame(width: 54, height: 54)
@@ -323,6 +324,8 @@ struct WeekAlbumView: View {
                 .buttonStyle(.plain)
             }
         }
+        .offset(x: CGFloat(week.tracks.count - 1 - 2 * selectedDayIndex) * 36)
+        .animation(.spring(response: 0.4, dampingFraction: 0.7), value: selectedDayIndex)
     }
 
     private var horizontalDragGesture: some Gesture {
