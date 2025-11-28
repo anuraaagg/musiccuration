@@ -45,7 +45,7 @@ class MusicKitManager: ObservableObject {
 
     searchTask = Task {
       isSearching = true
-      
+
       print("🔍 Starting search for: \(query)")
       print("🔐 Authorization status: \(authorizationStatus)")
 
@@ -73,14 +73,14 @@ class MusicKitManager: ObservableObject {
           types: [Song.self, Album.self, Artist.self]
         )
         searchRequest.limit = 20
-        
+
         let searchResponse = try await searchRequest.response()
         print("✅ Complex search response received")
-        
+
         // Collect all songs
         var allSongs: [Song] = []
         allSongs.append(contentsOf: Array(searchResponse.songs))
-        
+
         for album in searchResponse.albums.prefix(3) {
           if let tracks = album.tracks {
             let songs = tracks.compactMap { track -> Song? in
@@ -90,19 +90,21 @@ class MusicKitManager: ObservableObject {
             allSongs.append(contentsOf: songs.prefix(5))
           }
         }
-        
+
         for artist in searchResponse.artists.prefix(2) {
           // Simplified artist fetch to reduce failure points
-          let artistRequest = MusicCatalogResourceRequest<Artist>(matching: \.id, equalTo: artist.id)
+          let artistRequest = MusicCatalogResourceRequest<Artist>(
+            matching: \.id, equalTo: artist.id)
           if let detailedArtist = try? await artistRequest.response().items.first,
-             let topSongs = detailedArtist.topSongs {
-             allSongs.append(contentsOf: Array(topSongs.prefix(5)))
+            let topSongs = detailedArtist.topSongs
+          {
+            allSongs.append(contentsOf: Array(topSongs.prefix(5)))
           }
         }
-        
+
         let uniqueSongs = Array(Set(allSongs)).prefix(20)
         searchResults = Array(uniqueSongs)
-        
+
         // 2. Fallback: If no results, try simple song-only search
         if searchResults.isEmpty {
           print("⚠️ Complex search yielded no songs. Attempting simple fallback...")
@@ -112,14 +114,14 @@ class MusicKitManager: ObservableObject {
           searchResults = Array(simpleResponse.songs)
           print("✅ Simple fallback found \(searchResults.count) songs")
         }
-        
+
         if searchResults.isEmpty {
           print("⚠️ No results found for query: \(query)")
         } else {
           print("🎵 Total unique songs found: \(searchResults.count)")
           print("🎵 First result: \(searchResults[0].title) by \(searchResults[0].artistName)")
         }
-        
+
         isSearching = false
       } catch {
         print("❌ Search error: \(error.localizedDescription)")
