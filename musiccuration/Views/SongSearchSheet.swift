@@ -21,6 +21,31 @@ struct SongSearchSheet: View {
   var body: some View {
     NavigationView {
       VStack(spacing: 0) {
+        // Authorization Status Banner (for debugging)
+        if musicKit.authorizationStatus != .authorized {
+          VStack(spacing: 8) {
+            Text("Apple Music: \(authorizationStatusText)")
+              .font(.caption)
+              .foregroundColor(.orange)
+
+            Button(action: {
+              Task {
+                await musicKit.requestAuthorization()
+              }
+            }) {
+              Text("Request Permission")
+                .font(.caption)
+                .padding(.horizontal, 16)
+                .padding(.vertical, 8)
+                .background(Color.orange)
+                .foregroundColor(.white)
+                .cornerRadius(8)
+            }
+          }
+          .padding()
+          .background(Color.orange.opacity(0.1))
+        }
+
         // Search Bar
         HStack {
           Image(systemName: "magnifyingglass")
