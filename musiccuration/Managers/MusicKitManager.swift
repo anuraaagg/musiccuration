@@ -17,6 +17,7 @@ class MusicKitManager: ObservableObject {
   @Published var searchResults: [Song] = []
   @Published var isSearching: Bool = false
   @Published var currentlyPlayingSong: Song?
+  @Published var lastErrorMessage: String?
 
   private var searchTask: Task<Void, Never>?
   private var player: ApplicationMusicPlayer = ApplicationMusicPlayer.shared
@@ -145,9 +146,16 @@ class MusicKitManager: ObservableObject {
           }
 
           isSearching = false
+          isSearching = false
         } catch {
           print("❌ Search error: \(error.localizedDescription)")
           print("❌ Error details: \(error)")
+
+          // Update UI with error
+          await MainActor.run {
+            self.lastErrorMessage = "Error: \(error.localizedDescription)"
+          }
+
           searchResults = []
           isSearching = false
         }

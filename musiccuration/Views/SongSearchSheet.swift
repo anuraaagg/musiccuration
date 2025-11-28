@@ -123,6 +123,21 @@ struct SongSearchSheet: View {
             .padding(.top)
           Spacer()
         }
+      } else if let errorMessage = musicKit.lastErrorMessage {
+        VStack(spacing: 12) {
+          Spacer()
+          Image(systemName: "exclamationmark.triangle.fill")
+            .font(.system(size: 50))
+            .foregroundColor(.orange)
+          Text("Search Failed")
+            .font(.headline)
+          Text(errorMessage)
+            .font(.caption)
+            .foregroundColor(.gray)
+            .multilineTextAlignment(.center)
+            .padding(.horizontal)
+          Spacer()
+        }
       } else if searchText.isEmpty {
         VStack {
           Spacer()
