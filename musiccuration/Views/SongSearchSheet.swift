@@ -94,6 +94,21 @@ struct SongSearchSheet: View {
     }
   }
 
+  private var authorizationStatusText: String {
+    switch musicKit.authorizationStatus {
+    case .notDetermined:
+      return "Not Determined"
+    case .denied:
+      return "Denied"
+    case .restricted:
+      return "Restricted"
+    case .authorized:
+      return "Authorized"
+    @unknown default:
+      return "Unknown"
+    }
+  }
+
   // MARK: - Search Results List
 
   private var searchResultsList: some View {
