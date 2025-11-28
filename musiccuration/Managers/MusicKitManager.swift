@@ -45,9 +45,17 @@ class MusicKitManager: ObservableObject {
 
     searchTask = Task {
       isSearching = true
-
+      
       print("🔍 Starting search for: \(query)")
       print("🔐 Authorization status: \(authorizationStatus)")
+
+      // Check Country Code
+      do {
+        let countryCode = try await MusicDataRequest.currentCountryCode
+        print("🌍 Current Country Code: \(countryCode)")
+      } catch {
+        print("⚠️ Could not get country code: \(error.localizedDescription)")
+      }
 
       // Debounce: wait 300ms
       try? await Task.sleep(nanoseconds: 300_000_000)
@@ -58,76 +66,63 @@ class MusicKitManager: ObservableObject {
       }
 
       do {
-        // Search for songs, albums, AND artists
+        // 1. Try Complex Search (Songs, Albums, Artists)
+        print("📡 Attempting complex search...")
         var searchRequest = MusicCatalogSearchRequest(
           term: query,
           types: [Song.self, Album.self, Artist.self]
         )
         searchRequest.limit = 20
-
-        print("📡 Sending search request for songs, albums, and artists...")
+        
         let searchResponse = try await searchRequest.response()
-
-        print("✅ Search completed:")
-        print("   Songs: \(searchResponse.songs.count)")
-        print("   Albums: \(searchResponse.albums.count)")
-        print("   Artists: \(searchResponse.artists.count)")
-
-        guard !Task.isCancelled else {
-          isSearching = false
-          return
-        }
-
-        // Collect all songs from different sources
+        print("✅ Complex search response received")
+        
+        // Collect all songs
         var allSongs: [Song] = []
-
-        // Direct song results
         allSongs.append(contentsOf: Array(searchResponse.songs))
-
-        // Get songs from top albums
+        
         for album in searchResponse.albums.prefix(3) {
           if let tracks = album.tracks {
-            // Filter tracks that are songs (Track can be Song or MusicVideo)
             let songs = tracks.compactMap { track -> Song? in
-              if case .song(let song) = track {
-                return song
-              }
+              if case .song(let song) = track { return song }
               return nil
             }
             allSongs.append(contentsOf: songs.prefix(5))
           }
         }
-
-        // Get top songs from artists
+        
         for artist in searchResponse.artists.prefix(2) {
-          do {
-            let artistRequest = MusicCatalogResourceRequest<Artist>(
-              matching: \.id, equalTo: artist.id)
-            let detailedArtist = try await artistRequest.response().items.first
-
-            if let topSongs = detailedArtist?.topSongs {
-              allSongs.append(contentsOf: Array(topSongs.prefix(5)))
-            }
-          } catch {
-            print("⚠️ Could not fetch artist top songs: \(error.localizedDescription)")
+          // Simplified artist fetch to reduce failure points
+          let artistRequest = MusicCatalogResourceRequest<Artist>(matching: \.id, equalTo: artist.id)
+          if let detailedArtist = try? await artistRequest.response().items.first,
+             let topSongs = detailedArtist.topSongs {
+             allSongs.append(contentsOf: Array(topSongs.prefix(5)))
           }
         }
-
-        // Remove duplicates and limit results
+        
         let uniqueSongs = Array(Set(allSongs)).prefix(20)
         searchResults = Array(uniqueSongs)
-
+        
+        // 2. Fallback: If no results, try simple song-only search
+        if searchResults.isEmpty {
+          print("⚠️ Complex search yielded no songs. Attempting simple fallback...")
+          var simpleRequest = MusicCatalogSearchRequest(term: query, types: [Song.self])
+          simpleRequest.limit = 20
+          let simpleResponse = try await simpleRequest.response()
+          searchResults = Array(simpleResponse.songs)
+          print("✅ Simple fallback found \(searchResults.count) songs")
+        }
+        
         if searchResults.isEmpty {
           print("⚠️ No results found for query: \(query)")
         } else {
           print("🎵 Total unique songs found: \(searchResults.count)")
           print("🎵 First result: \(searchResults[0].title) by \(searchResults[0].artistName)")
         }
-
+        
         isSearching = false
       } catch {
         print("❌ Search error: \(error.localizedDescription)")
-        print("❌ Error type: \(type(of: error))")
         print("❌ Error details: \(error)")
         searchResults = []
         isSearching = false
