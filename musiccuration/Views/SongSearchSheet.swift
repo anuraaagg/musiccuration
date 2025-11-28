@@ -9,7 +9,7 @@ import MusicKit
 import SwiftUI
 
 struct SongSearchSheet: View {
-  @StateObject private var musicKit = MusicKitManager()
+  @ObservedObject private var musicKit = MusicKitManager.shared
   @State private var searchText = ""
   @State private var selectedSong: Song?
   @State private var showExpandedView = false
