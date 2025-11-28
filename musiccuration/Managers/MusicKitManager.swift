@@ -151,6 +151,29 @@ class MusicKitManager: ObservableObject {
           print("❌ Search error: \(error.localizedDescription)")
           print("❌ Error details: \(error)")
 
+          // SMART FALLBACK: If Developer Token fails (Personal Team), use iTunes API
+          if error.localizedDescription.contains("developer token")
+            || error.localizedDescription.contains("403")
+          {
+            print("⚠️ Personal Team detected. Falling back to iTunes API.")
+
+            await MainActor.run {
+              self.lastErrorMessage = nil  // Clear error - we're handling it
+            }
+
+            // Use iTunes API for real results
+            self.searchResults = await self.searchiTunesAPI(query: query)
+
+            if self.searchResults.isEmpty {
+              // If iTunes fails, last resort: static mocks
+              print("⚠️ iTunes API yielded no results. Using static mocks.")
+              self.searchResults = self.generateMockSongs()
+            }
+
+            isSearching = false
+            return
+          }
+
           // Update UI with error
           await MainActor.run {
             self.lastErrorMessage = "Error: \(error.localizedDescription)"
@@ -160,6 +183,88 @@ class MusicKitManager: ObservableObject {
           isSearching = false
         }
       #endif
+    }
+  }
+
+  // MARK: - iTunes API Fallback (Free Account Workaround)
+
+  private struct ITunesResult: Codable {
+    let trackId: Int
+    let trackName: String
+    let artistName: String
+    let collectionName: String?
+    let artworkUrl100: String?
+    let previewUrl: String?
+  }
+
+  private struct ITunesResponse: Codable {
+    let results: [ITunesResult]
+  }
+
+  private func searchiTunesAPI(query: String) async -> [Song] {
+    print("🌍 Fallback: Searching iTunes API for '\(query)'")
+
+    guard let encodedQuery = query.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
+      let url = URL(
+        string:
+          "https://itunes.apple.com/search?term=\(encodedQuery)&media=music&entity=song&limit=20")
+    else {
+      return []
+    }
+
+    do {
+      let (data, _) = try await URLSession.shared.data(from: url)
+      let response = try JSONDecoder().decode(ITunesResponse.self, from: data)
+
+      print("✅ iTunes API returned \(response.results.count) results")
+
+      // Convert iTunes results to MusicKit Songs using JSON decoder trick
+      let songs = response.results.compactMap { result -> Song? in
+        let id = String(result.trackId)
+        let title = result.trackName.replacingOccurrences(of: "\"", with: "\\\"")
+        let artist = result.artistName.replacingOccurrences(of: "\"", with: "\\\"")
+        let album = (result.collectionName ?? "").replacingOccurrences(of: "\"", with: "\\\"")
+        let artworkUrl = (result.artworkUrl100 ?? "").replacingOccurrences(
+          of: "100x100", with: "{w}x{h}")
+        let previewUrl = result.previewUrl ?? ""
+
+        let json = """
+          {
+            "id": "\(id)",
+            "type": "songs",
+            "href": "/v1/catalog/us/songs/\(id)",
+            "attributes": {
+              "name": "\(title)",
+              "artistName": "\(artist)",
+              "albumName": "\(album)",
+              "url": "https://music.apple.com/us/song/\(id)",
+              "playParams": {
+                "id": "\(id)",
+                "kind": "song"
+              },
+              "previews": [{"url": "\(previewUrl)"}],
+              "artwork": {
+                "width": 3000,
+                "height": 3000,
+                "url": "\(artworkUrl)",
+                "bgColor": "111111",
+                "textColor1": "ffffff",
+                "textColor2": "eeeeee",
+                "textColor3": "dddddd",
+                "textColor4": "cccccc"
+              }
+            }
+          }
+          """
+
+        guard let jsonData = json.data(using: .utf8) else { return nil }
+        return try? JSONDecoder().decode(Song.self, from: jsonData)
+      }
+
+      return songs
+    } catch {
+      print("❌ iTunes API Error: \(error)")
+      return []
     }
   }
 
