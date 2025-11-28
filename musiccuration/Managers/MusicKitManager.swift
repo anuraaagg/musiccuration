@@ -12,7 +12,7 @@ import MusicKit
 @MainActor
 class MusicKitManager: ObservableObject {
   static let shared = MusicKitManager()
-  
+
   @Published var authorizationStatus: MusicAuthorization.Status = .notDetermined
   @Published var searchResults: [Song] = []
   @Published var isSearching: Bool = false
