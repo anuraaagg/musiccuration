@@ -5,6 +5,7 @@
 //  Created by Anurag Singh on 25/11/25.
 //
 
+import Combine
 import SwiftUI
 
 // MARK: - Glass Player (Main Component)
@@ -15,6 +16,9 @@ struct WaveformPlayerBar: View {
   var artworkName: String?
   var accent: Color
   var onScrub: (CGFloat) -> Void
+
+  @State private var rotation: Double = 0
+  let timer = Timer.publish(every: 0.02, on: .main, in: .common).autoconnect()
 
   var body: some View {
     HStack(spacing: 16) {
@@ -36,6 +40,19 @@ struct WaveformPlayerBar: View {
           .stroke(Color.white.opacity(0.3), lineWidth: 2)
       )
       .shadow(color: .black.opacity(0.1), radius: 8, x: 0, y: 4)
+      .rotationEffect(.degrees(rotation))
+      .onReceive(timer) { _ in
+        if isPlaying {
+          rotation += 1.5
+          // Auto-advance progress (simulate 3 minute song)
+          if progress < 1.0 {
+            progress += 0.02 / 180.0
+          } else {
+            isPlaying = false
+            progress = 0
+          }
+        }
+      }
 
       // Waveform
       Waveform(
@@ -44,6 +61,22 @@ struct WaveformPlayerBar: View {
         accent: accent,
         onScrub: onScrub
       )
+
+      // Play/Pause Button
+      Button(action: {
+        isPlaying.toggle()
+        if isPlaying {
+          HapticsManager.shared.play()
+        } else {
+          HapticsManager.shared.pause()
+        }
+      }) {
+        Image(systemName: isPlaying ? "pause.fill" : "play.fill")
+          .font(.system(size: 20))
+          .foregroundColor(.primary.opacity(0.8))
+          .frame(width: 44, height: 44)
+          .contentShape(Rectangle())
+      }
     }
     .padding(16)
     .background(
@@ -66,7 +99,7 @@ struct Waveform: View {
   var accent: Color
   var onScrub: (CGFloat) -> Void
 
-  let bars = (0..<30).map { _ in CGFloat.random(in: 0.2...1) }
+  @State private var bars: [CGFloat] = (0..<30).map { _ in CGFloat.random(in: 0.2...1) }
 
   var body: some View {
     GeometryReader { geometry in
@@ -90,9 +123,7 @@ struct Waveform: View {
         .contentShape(Rectangle())
         .gesture(scrubGesture(width: width))
       }
-      .onTapGesture {
-        isPlaying.toggle()
-      }
+      // Removed onTapGesture as per user request to use the button instead
     }
     .frame(height: 40)
   }

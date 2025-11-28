@@ -5,6 +5,7 @@
 //  Created by Anurag Singh on 25/11/25.
 //
 
+import MusicKit
 import SwiftUI
 
 // MARK: - Root Content View
@@ -17,52 +18,72 @@ struct ContentView: View {
   @State private var isPlaying: Bool = false
   @State private var playbackProgress: CGFloat = 0.35
   @State private var scratchRotation: Angle = .degrees(0)
-  @State private var newTrackTitle: String = ""
-  @State private var newTrackArtist: String = ""
-  @State private var newTrackLink: String = ""
+  @State private var selectedCharacter: CharacterSticker = CharacterStickerLibrary.all[0]
+  @State private var isEngraving = false
+  @State private var showWelcome = true
 
   var body: some View {
-    GeometryReader { proxy in
-      ZStack {
-        background
-
-        switch activeMode {
-        case .today:
-          TodayView(
-            track: currentTrack,
-            weekNumber: currentWeek.number,
-            dayOfWeek: selectedDayIndex + 1,
-            progress: $playbackProgress,
-            isPlaying: $isPlaying,
-            scratchRotation: $scratchRotation,
-            onSwipeDown: openWeekView,
-            onSwipeUp: openAddView,
-            onScrub: scrubbed
-          )
-        case .week:
-          WeekAlbumView(
-            week: currentWeek,
-            weeks: weeks,
-            selectedDayIndex: $selectedDayIndex,
-            currentWeekIndex: $currentWeekIndex,
-            onPinchIn: openTodayView
-          )
-          .transition(.move(edge: .top))
-        case .add:
-          AddTrackView(
-            title: $newTrackTitle,
-            artist: $newTrackArtist,
-            link: $newTrackLink,
-            onCancel: openTodayView,
-            onEngrave: engraveNewTrack
-          )
-          .transition(.move(edge: .bottom))
+    if showWelcome {
+      WelcomeView(onSignIn: {
+        withAnimation(.easeInOut(duration: 0.8)) {
+          showWelcome = false
         }
+      })
+      .transition(.opacity)
+    } else {
+      GeometryReader { proxy in
+        ZStack {
+          background
+
+          // Determine which view to show based on daily check
+          if !hasEngravedToday() && activeMode == .today {
+            // Show engrave screen if not done today
+            AddTrackView(
+              selectedCharacter: $selectedCharacter,
+              isEngraving: isEngraving,
+              onCancel: { /* No cancel for default view */  },
+              onEngrave: engraveNewTrack
+            )
+          } else {
+            switch activeMode {
+            case .today:
+              TodayView(
+                track: currentTrack,
+                weekNumber: currentWeek.number,
+                dayOfWeek: selectedDayIndex + 1,
+                progress: $playbackProgress,
+                isPlaying: $isPlaying,
+                scratchRotation: $scratchRotation,
+                onSwipeDown: openWeekView,
+                onSwipeUp: openAddView,
+                onScrub: scrubbed
+              )
+            case .week:
+              WeekAlbumView(
+                week: currentWeek,
+                weeks: weeks,
+                selectedDayIndex: $selectedDayIndex,
+                currentWeekIndex: $currentWeekIndex,
+                onPinchIn: openTodayView
+              )
+              .transition(.move(edge: .top))
+            case .add:
+              AddTrackView(
+                selectedCharacter: $selectedCharacter,
+                isEngraving: isEngraving,
+                onCancel: openTodayView,
+                onEngrave: engraveNewTrack
+              )
+              .transition(.move(edge: .bottom))
+            }
+          }
+        }
+        .frame(width: proxy.size.width, height: proxy.size.height)
+        .animation(.spring(response: 0.55, dampingFraction: 0.85), value: activeMode)
       }
-      .frame(width: proxy.size.width, height: proxy.size.height)
-      .animation(.spring(response: 0.55, dampingFraction: 0.85), value: activeMode)
+      .preferredColorScheme(.light)
+      .transition(.opacity)
     }
-    .preferredColorScheme(.light)
   }
 
   private var background: some View {
@@ -98,26 +119,40 @@ struct ContentView: View {
     activeMode = .add
   }
 
-  private func engraveNewTrack() {
-    guard !newTrackTitle.isEmpty else { return }
-    guard let character = CharacterStickerLibrary.randomSticker() else { return }
+  private func hasEngravedToday() -> Bool {
+    let today = Calendar.current.startOfDay(for: Date())
+    let trackDate = Calendar.current.startOfDay(for: currentTrack.engravedDate)
+    return today == trackDate
+  }
 
-    let newTrack = Track(
-      title: newTrackTitle,
-      artist: newTrackArtist.isEmpty ? "Unknown Artist" : newTrackArtist,
-      dayIndex: selectedDayIndex,
-      weekIndex: currentWeek.number,
-      accent: character.accent,
-      character: character,
-      artworkName: nil,
-      sourceURL: URL(string: newTrackLink)
-    )
+  private func engraveNewTrack(_ song: Song) {
+    isEngraving = true
+    HapticsManager.shared.selectionTick()
 
-    weeks[currentWeekIndex].tracks[selectedDayIndex] = newTrack
-    newTrackTitle = ""
-    newTrackArtist = ""
-    newTrackLink = ""
-    activeMode = .today
+    // Simulate engraving delay
+    DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+      let newTrack = Track(
+        title: song.title,
+        artist: song.artistName,
+        dayIndex: selectedDayIndex,
+        weekIndex: currentWeek.number,
+        accent: selectedCharacter.accent,
+        character: selectedCharacter,
+        artworkName: nil,
+        sourceURL: nil,
+        appleMusicID: song.id.rawValue,
+        previewURL: song.previewAssets?.first?.url,
+        engravedDate: Date()
+      )
+
+      weeks[currentWeekIndex].tracks[selectedDayIndex] = newTrack
+
+      HapticsManager.shared.engraveSuccess()
+
+      selectedCharacter = CharacterStickerLibrary.randomSticker() ?? CharacterStickerLibrary.all[0]
+      isEngraving = false
+      activeMode = .today
+    }
   }
 }
 

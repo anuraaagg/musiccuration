@@ -47,8 +47,18 @@ struct WeekAlbumView: View {
         VinylDisc(track: week.tracks[selectedDayIndex], scratchRotation: .degrees(0))
           .frame(width: 280, height: 280)
           .onTapGesture {
+            HapticsManager.shared.selectionTick()
             onPinchIn()
           }
+          .gesture(
+            MagnificationGesture()
+              .onEnded { value in
+                if value > 1.2 {  // Zoom in
+                  HapticsManager.shared.selectionTick()
+                  onPinchIn()
+                }
+              }
+          )
           .padding(.bottom, 50)
 
         // Mini Daily Vinyls
@@ -67,6 +77,7 @@ struct WeekAlbumView: View {
               .scaleEffect(selectedDayIndex == index ? 1.05 : 0.95)
               .onTapGesture {
                 selectedDayIndex = index
+                HapticsManager.shared.selectionTick()
               }
           }
 
@@ -129,20 +140,31 @@ struct WeekAlbumView: View {
           .frame(height: 40)
       }
     }
-    .gesture(horizontalDragGesture)
+    .gesture(
+      DragGesture()
+        .updating($dragOffset) { value, state, _ in
+          state = value.translation.width
+        }
+        .onEnded { value in
+          // Check dominant axis
+          if abs(value.translation.width) > abs(value.translation.height) {
+            // Horizontal Swipe -> Change Week
+            if value.translation.width < -80, currentWeekIndex < weeks.count - 1 {
+              currentWeekIndex += 1
+              HapticsManager.shared.selectionTick()
+            } else if value.translation.width > 80, currentWeekIndex > 0 {
+              currentWeekIndex -= 1
+              HapticsManager.shared.selectionTick()
+            }
+          } else {
+            // Vertical Swipe Up -> Return to Home
+            if value.translation.height < -100 {
+              HapticsManager.shared.selectionTick()
+              onPinchIn()
+            }
+          }
+        }
+    )
   }
 
-  private var horizontalDragGesture: some Gesture {
-    DragGesture()
-      .updating($dragOffset) { value, state, _ in
-        state = value.translation.width
-      }
-      .onEnded { value in
-        if value.translation.width < -80, currentWeekIndex < weeks.count - 1 {
-          currentWeekIndex += 1
-        } else if value.translation.width > 80, currentWeekIndex > 0 {
-          currentWeekIndex -= 1
-        }
-      }
-  }
 }

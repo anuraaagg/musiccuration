@@ -5,16 +5,16 @@
 //  Created by Anurag Singh on 25/11/25.
 //
 
+import MusicKit
 import SwiftUI
 
 struct AddTrackView: View {
-  @Binding var title: String
-  @Binding var artist: String
-  @Binding var link: String
+  @Binding var selectedCharacter: CharacterSticker
+  @State private var selectedSong: Song?
+  @State private var showSearchSheet = false
+  var isEngraving: Bool
   var onCancel: () -> Void
-  var onEngrave: () -> Void
-
-  @State private var isEngraving: Bool = false
+  var onEngrave: (Song) -> Void
 
   var body: some View {
     ZStack {
@@ -29,68 +29,86 @@ struct AddTrackView: View {
       )
       .ignoresSafeArea()
 
-      VStack(spacing: 32) {
+      VStack(spacing: 24) {
         Spacer()
+          .frame(height: 20)
 
         // Title
         Text("Engrave Today's Song")
           .font(.system(size: 28, weight: .bold))
 
-        // Blank Vinyl Preview
-        VinylPlaceholder()
-          .frame(width: 240, height: 240)
-          .scaleEffect(isEngraving ? 1.1 : 1.0)
-          .animation(.easeInOut(duration: 1.5), value: isEngraving)
+        // Square Vinyl Case
+        SquareVinylCase(character: selectedCharacter, isEngraving: isEngraving)
+          .frame(width: 280, height: 280)
+          .padding(.bottom, 8)
 
-        // Input Section
-        VStack(spacing: 24) {
-          VStack(alignment: .leading, spacing: 16) {
-            Text("Song Details")
-              .font(.system(size: 14, weight: .medium))
+        // Character Selector
+        CharacterSelectorView(selectedCharacter: $selectedCharacter)
+          .padding(.horizontal, 24)
 
+        // Selected Song Display or Search Button
+        VStack(spacing: 16) {
+          if let song = selectedSong {
+            // Selected Song Card
             VStack(spacing: 12) {
-              TextField("Song title", text: $title)
-                .padding(16)
-                .background(
-                  RoundedRectangle(cornerRadius: 12)
-                    .fill(.ultraThinMaterial)
-                )
+              HStack(spacing: 12) {
+                // Album Art
+                if let artwork = song.artwork {
+                  ArtworkImage(artwork, width: 60, height: 60)
+                    .cornerRadius(8)
+                } else {
+                  RoundedRectangle(cornerRadius: 8)
+                    .fill(Color.gray.opacity(0.2))
+                    .frame(width: 60, height: 60)
+                }
 
-              TextField("Artist", text: $artist)
-                .padding(16)
-                .background(
-                  RoundedRectangle(cornerRadius: 12)
-                    .fill(.ultraThinMaterial)
-                )
+                // Song Info
+                VStack(alignment: .leading, spacing: 4) {
+                  Text(song.title)
+                    .font(.system(size: 16, weight: .semibold))
+                    .lineLimit(1)
 
-              TextField("Link or URL (optional)", text: $link)
-                .padding(16)
-                .background(
-                  RoundedRectangle(cornerRadius: 12)
-                    .fill(.ultraThinMaterial)
-                )
+                  Text(song.artistName)
+                    .font(.system(size: 14))
+                    .foregroundColor(.gray)
+                    .lineLimit(1)
+                }
+
+                Spacer()
+
+                // Change Button
+                Button(action: { showSearchSheet = true }) {
+                  Image(systemName: "pencil.circle.fill")
+                    .font(.system(size: 28))
+                    .foregroundColor(selectedCharacter.accent)
+                }
+              }
+              .padding()
+              .background(
+                RoundedRectangle(cornerRadius: 12)
+                  .fill(.ultraThinMaterial)
+              )
             }
+          } else {
+            // Search Button
+            FrostedGlassButton(
+              title: "Search for a Song",
+              icon: "magnifyingglass",
+              action: { showSearchSheet = true }
+            )
           }
-          .padding(24)
-          .background(
-            RoundedRectangle(cornerRadius: 16)
-              .fill(.ultraThinMaterial)
-          )
 
           // Engrave Button
-          Button(action: handleEngrave) {
-            Text(isEngraving ? "Engraving..." : "Press to Engrave")
-              .font(.system(size: 18, weight: .semibold))
-              .foregroundColor(.white)
-              .frame(maxWidth: .infinity)
-              .frame(height: 56)
-              .background(
-                RoundedRectangle(cornerRadius: 14)
-                  .fill(Color(red: 0.96, green: 0.47, blue: 0.42))
-              )
-          }
-          .disabled(title.isEmpty || isEngraving)
-          .opacity(title.isEmpty || isEngraving ? 0.5 : 1.0)
+          FrostedGlassButton(
+            title: isEngraving ? "Engraving..." : "Press to Engrave",
+            accentColor: selectedCharacter.accent,
+            isEnabled: selectedSong != nil && !isEngraving,
+            action: {
+              if let song = selectedSong {
+                onEngrave(song)
+              }
+            }
+          )
         }
         .padding(.horizontal, 24)
 
@@ -99,36 +117,28 @@ struct AddTrackView: View {
           Text("Choose the song that represents your day.")
           Text("You can only pick one.")
         }
-        .font(.system(size: 14))
+        .font(.system(size: 13))
         .foregroundColor(.secondary)
         .multilineTextAlignment(.center)
 
         Spacer()
       }
 
-      // Close Button
-      VStack {
-        HStack {
-          Spacer()
-          Button(action: onCancel) {
-            Image(systemName: "xmark")
-              .font(.system(size: 20))
-              .foregroundColor(.primary)
-              .frame(width: 40, height: 40)
-              .background(Circle().fill(.ultraThinMaterial))
+      Spacer()
+    }
+    .sheet(isPresented: $showSearchSheet) {
+      SongSearchSheet(onSongSelected: { song in
+        selectedSong = song
+      })
+    }
+    .gesture(
+      DragGesture()
+        .onEnded { value in
+          if value.translation.height > 100 {
+            HapticsManager.shared.selectionTick()
+            onCancel()
           }
-          .padding(24)
         }
-        Spacer()
-      }
-    }
-  }
-
-  func handleEngrave() {
-    isEngraving = true
-    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-      onEngrave()
-      isEngraving = false
-    }
+    )
   }
 }
