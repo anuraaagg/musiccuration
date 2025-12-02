@@ -150,16 +150,6 @@ struct SquareVinylCase: View {
           )
           .frame(width: size, height: size)
 
-        // Floating Shadow for Parallax Depth
-        Circle()
-          .fill(Color.black.opacity(0.4))
-          .frame(width: size * 0.65, height: size * 0.65)
-          .blur(radius: 15)
-          .offset(
-            x: dragTranslation.width / 20 + 10,  // Shadow moves less than vinyl + static offset
-            y: dragTranslation.height / 20 + 20
-          )
-
         // Vinyl Disc with Parallax Movement
         VinylDisc(
           track: Track(
@@ -214,6 +204,13 @@ struct SquareVinylCase: View {
             .font(.system(size: size * 0.09))
             .rotationEffect(.degrees(12))
             .offset(x: -size * 0.35, y: size * 0.28)
+            .shadow(color: .black.opacity(0.2), radius: 2, x: 0, y: 2)
+
+          // Album sticker
+          Text("💿")
+            .font(.system(size: size * 0.08))
+            .rotationEffect(.degrees(-25))
+            .offset(x: size * 0.25, y: -size * 0.25)
             .shadow(color: .black.opacity(0.2), radius: 2, x: 0, y: 2)
         }
         .opacity(0.7)

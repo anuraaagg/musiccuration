@@ -14,7 +14,6 @@ struct VinylDisc: View {
   var body: some View {
     GeometryReader { geometry in
       let size = min(geometry.size.width, geometry.size.height)
-      let center = CGPoint(x: geometry.size.width / 2, y: geometry.size.height / 2)
 
       ZStack {
         // Main black vinyl disc
@@ -88,7 +87,6 @@ struct VinylDisc: View {
       }
       .position(x: geometry.size.width / 2, y: geometry.size.height / 2)
       .rotationEffect(scratchRotation)
-      .shadow(color: .black.opacity(0.15), radius: size * 0.07, x: 0, y: size * 0.07)
     }
   }
 }

@@ -35,7 +35,7 @@ struct AddTrackView: View {
 
         // Title
         Text("Engrave Today's Song")
-          .font(.system(size: 28, weight: .bold))
+          .font(.system(size: 24, weight: .bold))
 
         // Square Vinyl Case
         SquareVinylCase(character: selectedCharacter, isEngraving: isEngraving)
@@ -117,7 +117,7 @@ struct AddTrackView: View {
           Text("Choose the song that represents your day.")
           Text("You can only pick one.")
         }
-        .font(.system(size: 13))
+        .font(.system(size: 12))
         .foregroundColor(.secondary)
         .multilineTextAlignment(.center)
 

@@ -1,0 +1,4 @@
+Target dependency graph (2 targets)
+Target 'musiccuration' in project 'musiccuration'
+➜ Explicit dependency on target 'MusicWidgetExtension' in project 'musiccuration'
+Target 'MusicWidgetExtension' in project 'musiccuration' (no dependencies)

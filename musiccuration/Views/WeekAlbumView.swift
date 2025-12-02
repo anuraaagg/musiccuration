@@ -59,21 +59,36 @@ struct WeekAlbumView: View {
                 }
               }
           )
-          .padding(.bottom, 50)
+          .padding(.bottom, 20)
+
+        // Song Info
+        VStack(spacing: 4) {
+          Text(week.tracks[selectedDayIndex].title)
+            .font(.system(size: 20, weight: .bold))
+            .lineLimit(1)
+            .foregroundColor(.primary)
+
+          Text(week.tracks[selectedDayIndex].artist)
+            .font(.system(size: 16, weight: .medium))
+            .lineLimit(1)
+            .foregroundColor(.secondary)
+        }
+        .padding(.bottom, 30)
 
         // Mini Daily Vinyls
         HStack(spacing: 12) {
           ForEach(week.tracks.indices, id: \.self) { index in
             VinylDisc(track: week.tracks[index], scratchRotation: .degrees(0))
               .frame(width: 48, height: 48)
-              .shadow(color: .black.opacity(0.12), radius: 6, x: 0, y: 4)
               .overlay(
                 Circle().stroke(
-                  Color.white.opacity(selectedDayIndex == index ? 0.5 : 0.0),
-                  lineWidth: 1.5
+                  week.tracks[index].accent,
+                  lineWidth: selectedDayIndex == index ? 3 : 2
                 )
+                .padding(-2)
               )
-              .opacity(selectedDayIndex == index ? 1 : 0.6)
+              .shadow(color: .black.opacity(0.12), radius: 6, x: 0, y: 4)
+              .opacity(selectedDayIndex == index ? 1 : 0.7)
               .scaleEffect(selectedDayIndex == index ? 1.05 : 0.95)
               .onTapGesture {
                 selectedDayIndex = index

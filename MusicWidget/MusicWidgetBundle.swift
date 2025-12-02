@@ -5,14 +5,12 @@
 //  Created by Anurag Singh on 01/12/25.
 //
 
-import WidgetKit
 import SwiftUI
+import WidgetKit
 
 @main
 struct MusicWidgetBundle: WidgetBundle {
-    var body: some Widget {
-        MusicWidget()
-        MusicWidgetControl()
-        MusicWidgetLiveActivity()
-    }
+  var body: some Widget {
+    MusicWidget()
+  }
 }

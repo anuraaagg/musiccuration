@@ -32,17 +32,17 @@ struct FrostedGlassButton: View {
 
   var body: some View {
     Button(action: handleTap) {
-      HStack(spacing: 10) {
+      HStack(spacing: 8) {
         if let icon = icon {
           Image(systemName: icon)
-            .font(.system(size: 20, weight: .semibold))
+            .font(.system(size: 16, weight: .medium))
         }
         Text(title)
-          .font(.system(size: 18, weight: .semibold))
+          .font(.system(size: 16, weight: .medium))
       }
       .foregroundColor(isEnabled ? .black : .black.opacity(0.4))
-      .padding(.horizontal, 32)
-      .padding(.vertical, 18)
+      .frame(maxWidth: .infinity)
+      .padding(.vertical, 16)
       .background(
         ZStack {
           // Frosted glass background

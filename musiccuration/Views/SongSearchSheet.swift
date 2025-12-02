@@ -13,6 +13,7 @@ struct SongSearchSheet: View {
   @State private var searchText = ""
   @State private var selectedSong: Song?
   @State private var showExpandedView = false
+  @FocusState private var isSearchFocused: Bool
 
   let onSongSelected: (Song) -> Void
 
@@ -21,51 +22,40 @@ struct SongSearchSheet: View {
   var body: some View {
     NavigationView {
       VStack(spacing: 0) {
-        // Authorization Status Banner (for debugging)
-        if musicKit.authorizationStatus != .authorized {
-          VStack(spacing: 8) {
-            Text("Apple Music: \(authorizationStatusText)")
-              .font(.caption)
-              .foregroundColor(.orange)
-
-            Button(action: {
-              Task {
-                await musicKit.requestAuthorization()
-              }
-            }) {
-              Text("Request Permission")
-                .font(.caption)
-                .padding(.horizontal, 16)
-                .padding(.vertical, 8)
-                .background(Color.orange)
-                .foregroundColor(.white)
-                .cornerRadius(8)
-            }
-          }
-          .padding()
-          .background(Color.orange.opacity(0.1))
-        }
-
         // Search Bar
-        HStack {
+        HStack(spacing: 12) {
           Image(systemName: "magnifyingglass")
-            .foregroundColor(.gray)
+            .font(.system(size: 18))
+            .foregroundColor(.secondary)
 
           TextField("Search for a song...", text: $searchText)
             .textFieldStyle(.plain)
             .autocorrectionDisabled()
+            .font(.system(size: 17))
+            .focused($isSearchFocused)
 
           if !searchText.isEmpty {
-            Button(action: { searchText = "" }) {
+            Button(action: {
+              searchText = ""
+            }) {
               Image(systemName: "xmark.circle.fill")
-                .foregroundColor(.gray)
+                .font(.system(size: 18))
+                .foregroundColor(.secondary)
             }
           }
         }
-        .padding(12)
-        .background(Color.gray.opacity(0.1))
-        .cornerRadius(12)
-        .padding()
+        .padding(14)
+        .background(
+          RoundedRectangle(cornerRadius: 12)
+            .fill(Color(.systemGray6))
+        )
+        .overlay(
+          RoundedRectangle(cornerRadius: 12)
+            .stroke(Color(.systemGray4).opacity(0.3), lineWidth: 1)
+        )
+        .shadow(color: Color.black.opacity(0.05), radius: 8, x: 0, y: 2)
+        .padding(.horizontal)
+        .padding(.vertical, 12)
 
         // Content
         if showExpandedView, let song = selectedSong {
@@ -114,13 +104,15 @@ struct SongSearchSheet: View {
   private var searchResultsList: some View {
     Group {
       if musicKit.isSearching {
-        VStack {
+        VStack(spacing: 20) {
           Spacer()
           ProgressView()
             .scaleEffect(1.5)
+            .tint(.blue)
+
           Text("Searching...")
-            .foregroundColor(.gray)
-            .padding(.top)
+            .font(.subheadline)
+            .foregroundColor(.secondary)
           Spacer()
         }
       } else if let errorMessage = musicKit.lastErrorMessage {
@@ -139,17 +131,25 @@ struct SongSearchSheet: View {
           Spacer()
         }
       } else if searchText.isEmpty {
-        VStack {
+        VStack(spacing: 16) {
           Spacer()
           Image(systemName: "music.note.list")
-            .font(.system(size: 60))
-            .foregroundColor(.gray.opacity(0.5))
-          Text("Search for a song")
-            .font(.title3)
-            .foregroundColor(.gray)
-            .padding(.top, 8)
+            .font(.system(size: 70))
+            .foregroundColor(.gray.opacity(0.3))
+
+          VStack(spacing: 8) {
+            Text("Search for Your Favorite Songs")
+              .font(.title3)
+              .fontWeight(.medium)
+              .foregroundColor(.primary)
+
+            Text("Find songs, artists, or albums")
+              .font(.subheadline)
+              .foregroundColor(.secondary)
+          }
           Spacer()
         }
+        .padding()
       } else if musicKit.searchResults.isEmpty {
         VStack {
           Spacer()
@@ -173,6 +173,9 @@ struct SongSearchSheet: View {
                 song: song,
                 isPlaying: musicKit.isPlaying(song: song),
                 onTap: {
+                  // Dismiss keyboard first
+                  isSearchFocused = false
+
                   withAnimation(.spring(response: 0.4, dampingFraction: 0.8)) {
                     selectedSong = song
                     showExpandedView = true
@@ -205,9 +208,9 @@ struct SongSearchSheet: View {
 
       // Album Art
       if let artwork = song.artwork {
-        ArtworkImage(artwork, width: 280, height: 280)
-          .cornerRadius(20)
-          .shadow(color: .black.opacity(0.3), radius: 20, x: 0, y: 10)
+        ArtworkImage(artwork, width: 260, height: 260)
+          .clipShape(RoundedRectangle(cornerRadius: 24))
+          .shadow(color: Color.black.opacity(0.2), radius: 20, x: 0, y: 10)
       } else {
         RoundedRectangle(cornerRadius: 20)
           .fill(Color.gray.opacity(0.2))
@@ -233,40 +236,17 @@ struct SongSearchSheet: View {
       }
       .padding(.horizontal)
 
-      // Play/Pause Button
+      // Play/Pause Button (compact)
       Button(action: {
         Task {
           await musicKit.togglePlayback(for: song)
         }
       }) {
-        HStack(spacing: 12) {
-          Image(systemName: musicKit.isPlaying(song: song) ? "pause.fill" : "play.fill")
-            .font(.system(size: 20))
-          Text(musicKit.isPlaying(song: song) ? "Pause Preview" : "Play Preview")
-            .font(.system(size: 18, weight: .semibold))
-        }
-        .foregroundColor(.black)
-        .padding(.horizontal, 32)
-        .padding(.vertical, 16)
-        .background(
-          RoundedRectangle(cornerRadius: 100)
-            .fill(.ultraThinMaterial)
-            .overlay(
-              RoundedRectangle(cornerRadius: 100)
-                .fill(
-                  LinearGradient(
-                    colors: [Color.white.opacity(0.7), Color.white.opacity(0.4)],
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                  )
-                )
-            )
-        )
-        .overlay(
-          RoundedRectangle(cornerRadius: 100)
-            .stroke(Color.white.opacity(0.8), lineWidth: 1.5)
-        )
+        Image(systemName: musicKit.isPlaying(song: song) ? "pause.circle.fill" : "play.circle.fill")
+          .font(.system(size: 44))
+          .foregroundColor(.primary.opacity(0.7))
       }
+      .padding(.top, 12)
 
       Spacer()
 
@@ -313,27 +293,46 @@ struct SongRow: View {
         // Album Art
         if let artwork = song.artwork {
           ArtworkImage(artwork, width: 60, height: 60)
-            .cornerRadius(8)
+            .clipShape(RoundedRectangle(cornerRadius: 10))
         } else {
-          RoundedRectangle(cornerRadius: 8)
-            .fill(Color.gray.opacity(0.2))
+          // Liquid glass thumbnail
+          RoundedRectangle(cornerRadius: 10)
+            .fill(
+              LinearGradient(
+                colors: [
+                  Color.gray.opacity(0.12),
+                  Color.gray.opacity(0.06),
+                ],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+              )
+            )
             .frame(width: 60, height: 60)
             .overlay(
+              RoundedRectangle(cornerRadius: 10)
+                .fill(.ultraThinMaterial)
+            )
+            .overlay(
               Image(systemName: "music.note")
-                .foregroundColor(.gray)
+                .font(.system(size: 20))
+                .foregroundColor(.secondary.opacity(0.4))
+            )
+            .overlay(
+              RoundedRectangle(cornerRadius: 10)
+                .stroke(Color.white.opacity(0.2), lineWidth: 0.5)
             )
         }
 
         // Song Info
-        VStack(alignment: .leading, spacing: 4) {
+        VStack(alignment: .leading, spacing: 2) {
           Text(song.title)
-            .font(.system(size: 16, weight: .semibold))
+            .font(.system(size: 15, weight: .medium))
             .foregroundColor(.primary)
             .lineLimit(1)
 
           Text(song.artistName)
-            .font(.system(size: 14))
-            .foregroundColor(.gray)
+            .font(.system(size: 13))
+            .foregroundColor(.secondary)
             .lineLimit(1)
         }
 

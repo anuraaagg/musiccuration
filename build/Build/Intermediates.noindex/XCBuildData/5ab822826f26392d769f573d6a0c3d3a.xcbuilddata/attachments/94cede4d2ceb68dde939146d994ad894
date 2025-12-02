@@ -1,0 +1,79 @@
+{
+  "" : {
+    "diagnostics" : "/Users/anuragsingh/Documents/musiccuration/build/Build/Intermediates.noindex/musiccuration.build/Debug-iphonesimulator/MusicWidgetExtension.build/Objects-normal/arm64/MusicWidgetExtension-primary.dia",
+    "emit-module-dependencies" : "/Users/anuragsingh/Documents/musiccuration/build/Build/Intermediates.noindex/musiccuration.build/Debug-iphonesimulator/MusicWidgetExtension.build/Objects-normal/arm64/MusicWidgetExtension-primary-emit-module.d",
+    "emit-module-diagnostics" : "/Users/anuragsingh/Documents/musiccuration/build/Build/Intermediates.noindex/musiccuration.build/Debug-iphonesimulator/MusicWidgetExtension.build/Objects-normal/arm64/MusicWidgetExtension-primary-emit-module.dia",
+    "pch" : "/Users/anuragsingh/Documents/musiccuration/build/Build/Intermediates.noindex/musiccuration.build/Debug-iphonesimulator/MusicWidgetExtension.build/Objects-normal/arm64/MusicWidgetExtension-primary-Bridging-header.pch",
+    "swift-dependencies" : "/Users/anuragsingh/Documents/musiccuration/build/Build/Intermediates.noindex/musiccuration.build/Debug-iphonesimulator/MusicWidgetExtension.build/Objects-normal/arm64/MusicWidgetExtension-primary.swiftdeps"
+  },
+  "/Users/anuragsingh/Documents/musiccuration/MusicWidget/MusicWidget.swift" : {
+    "const-values" : "/Users/anuragsingh/Documents/musiccuration/build/Build/Intermediates.noindex/musiccuration.build/Debug-iphonesimulator/MusicWidgetExtension.build/Objects-normal/arm64/MusicWidget.swiftconstvalues",
+    "dependencies" : "/Users/anuragsingh/Documents/musiccuration/build/Build/Intermediates.noindex/musiccuration.build/Debug-iphonesimulator/MusicWidgetExtension.build/Objects-normal/arm64/MusicWidget.d",
+    "diagnostics" : "/Users/anuragsingh/Documents/musiccuration/build/Build/Intermediates.noindex/musiccuration.build/Debug-iphonesimulator/MusicWidgetExtension.build/Objects-normal/arm64/MusicWidget.dia",
+    "index-unit-output-path" : "/musiccuration.build/Debug-iphonesimulator/MusicWidgetExtension.build/Objects-normal/arm64/MusicWidget.o",
+    "llvm-bc" : "/Users/anuragsingh/Documents/musiccuration/build/Build/Intermediates.noindex/musiccuration.build/Debug-iphonesimulator/MusicWidgetExtension.build/Objects-normal/arm64/MusicWidget.bc",
+    "object" : "/Users/anuragsingh/Documents/musiccuration/build/Build/Intermediates.noindex/musiccuration.build/Debug-iphonesimulator/MusicWidgetExtension.build/Objects-normal/arm64/MusicWidget.o",
+    "swift-dependencies" : "/Users/anuragsingh/Documents/musiccuration/build/Build/Intermediates.noindex/musiccuration.build/Debug-iphonesimulator/MusicWidgetExtension.build/Objects-normal/arm64/MusicWidget.swiftdeps",
+    "swiftmodule" : "/Users/anuragsingh/Documents/musiccuration/build/Build/Intermediates.noindex/musiccuration.build/Debug-iphonesimulator/MusicWidgetExtension.build/Objects-normal/arm64/MusicWidget~partial.swiftmodule"
+  },
+  "/Users/anuragsingh/Documents/musiccuration/MusicWidget/MusicWidgetBundle.swift" : {
+    "const-values" : "/Users/anuragsingh/Documents/musiccuration/build/Build/Intermediates.noindex/musiccuration.build/Debug-iphonesimulator/MusicWidgetExtension.build/Objects-normal/arm64/MusicWidgetBundle.swiftconstvalues",
+    "dependencies" : "/Users/anuragsingh/Documents/musiccuration/build/Build/Intermediates.noindex/musiccuration.build/Debug-iphonesimulator/MusicWidgetExtension.build/Objects-normal/arm64/MusicWidgetBundle.d",
+    "diagnostics" : "/Users/anuragsingh/Documents/musiccuration/build/Build/Intermediates.noindex/musiccuration.build/Debug-iphonesimulator/MusicWidgetExtension.build/Objects-normal/arm64/MusicWidgetBundle.dia",
+    "index-unit-output-path" : "/musiccuration.build/Debug-iphonesimulator/MusicWidgetExtension.build/Objects-normal/arm64/MusicWidgetBundle.o",
+    "llvm-bc" : "/Users/anuragsingh/Documents/musiccuration/build/Build/Intermediates.noindex/musiccuration.build/Debug-iphonesimulator/MusicWidgetExtension.build/Objects-normal/arm64/MusicWidgetBundle.bc",
+    "object" : "/Users/anuragsingh/Documents/musiccuration/build/Build/Intermediates.noindex/musiccuration.build/Debug-iphonesimulator/MusicWidgetExtension.build/Objects-normal/arm64/MusicWidgetBundle.o",
+    "swift-dependencies" : "/Users/anuragsingh/Documents/musiccuration/build/Build/Intermediates.noindex/musiccuration.build/Debug-iphonesimulator/MusicWidgetExtension.build/Objects-normal/arm64/MusicWidgetBundle.swiftdeps",
+    "swiftmodule" : "/Users/anuragsingh/Documents/musiccuration/build/Build/Intermediates.noindex/musiccuration.build/Debug-iphonesimulator/MusicWidgetExtension.build/Objects-normal/arm64/MusicWidgetBundle~partial.swiftmodule"
+  },
+  "/Users/anuragsingh/Documents/musiccuration/MusicWidget/MusicWidgetIntents.swift" : {
+    "const-values" : "/Users/anuragsingh/Documents/musiccuration/build/Build/Intermediates.noindex/musiccuration.build/Debug-iphonesimulator/MusicWidgetExtension.build/Objects-normal/arm64/MusicWidgetIntents.swiftconstvalues",
+    "dependencies" : "/Users/anuragsingh/Documents/musiccuration/build/Build/Intermediates.noindex/musiccuration.build/Debug-iphonesimulator/MusicWidgetExtension.build/Objects-normal/arm64/MusicWidgetIntents.d",
+    "diagnostics" : "/Users/anuragsingh/Documents/musiccuration/build/Build/Intermediates.noindex/musiccuration.build/Debug-iphonesimulator/MusicWidgetExtension.build/Objects-normal/arm64/MusicWidgetIntents.dia",
+    "index-unit-output-path" : "/musiccuration.build/Debug-iphonesimulator/MusicWidgetExtension.build/Objects-normal/arm64/MusicWidgetIntents.o",
+    "llvm-bc" : "/Users/anuragsingh/Documents/musiccuration/build/Build/Intermediates.noindex/musiccuration.build/Debug-iphonesimulator/MusicWidgetExtension.build/Objects-normal/arm64/MusicWidgetIntents.bc",
+    "object" : "/Users/anuragsingh/Documents/musiccuration/build/Build/Intermediates.noindex/musiccuration.build/Debug-iphonesimulator/MusicWidgetExtension.build/Objects-normal/arm64/MusicWidgetIntents.o",
+    "swift-dependencies" : "/Users/anuragsingh/Documents/musiccuration/build/Build/Intermediates.noindex/musiccuration.build/Debug-iphonesimulator/MusicWidgetExtension.build/Objects-normal/arm64/MusicWidgetIntents.swiftdeps",
+    "swiftmodule" : "/Users/anuragsingh/Documents/musiccuration/build/Build/Intermediates.noindex/musiccuration.build/Debug-iphonesimulator/MusicWidgetExtension.build/Objects-normal/arm64/MusicWidgetIntents~partial.swiftmodule"
+  },
+  "/Users/anuragsingh/Documents/musiccuration/MusicWidget/StaticPlayerBar.swift" : {
+    "const-values" : "/Users/anuragsingh/Documents/musiccuration/build/Build/Intermediates.noindex/musiccuration.build/Debug-iphonesimulator/MusicWidgetExtension.build/Objects-normal/arm64/StaticPlayerBar.swiftconstvalues",
+    "dependencies" : "/Users/anuragsingh/Documents/musiccuration/build/Build/Intermediates.noindex/musiccuration.build/Debug-iphonesimulator/MusicWidgetExtension.build/Objects-normal/arm64/StaticPlayerBar.d",
+    "diagnostics" : "/Users/anuragsingh/Documents/musiccuration/build/Build/Intermediates.noindex/musiccuration.build/Debug-iphonesimulator/MusicWidgetExtension.build/Objects-normal/arm64/StaticPlayerBar.dia",
+    "index-unit-output-path" : "/musiccuration.build/Debug-iphonesimulator/MusicWidgetExtension.build/Objects-normal/arm64/StaticPlayerBar.o",
+    "llvm-bc" : "/Users/anuragsingh/Documents/musiccuration/build/Build/Intermediates.noindex/musiccuration.build/Debug-iphonesimulator/MusicWidgetExtension.build/Objects-normal/arm64/StaticPlayerBar.bc",
+    "object" : "/Users/anuragsingh/Documents/musiccuration/build/Build/Intermediates.noindex/musiccuration.build/Debug-iphonesimulator/MusicWidgetExtension.build/Objects-normal/arm64/StaticPlayerBar.o",
+    "swift-dependencies" : "/Users/anuragsingh/Documents/musiccuration/build/Build/Intermediates.noindex/musiccuration.build/Debug-iphonesimulator/MusicWidgetExtension.build/Objects-normal/arm64/StaticPlayerBar.swiftdeps",
+    "swiftmodule" : "/Users/anuragsingh/Documents/musiccuration/build/Build/Intermediates.noindex/musiccuration.build/Debug-iphonesimulator/MusicWidgetExtension.build/Objects-normal/arm64/StaticPlayerBar~partial.swiftmodule"
+  },
+  "/Users/anuragsingh/Documents/musiccuration/build/Build/Intermediates.noindex/musiccuration.build/Debug-iphonesimulator/MusicWidgetExtension.build/DerivedSources/GeneratedAssetSymbols.swift" : {
+    "const-values" : "/Users/anuragsingh/Documents/musiccuration/build/Build/Intermediates.noindex/musiccuration.build/Debug-iphonesimulator/MusicWidgetExtension.build/Objects-normal/arm64/GeneratedAssetSymbols.swiftconstvalues",
+    "dependencies" : "/Users/anuragsingh/Documents/musiccuration/build/Build/Intermediates.noindex/musiccuration.build/Debug-iphonesimulator/MusicWidgetExtension.build/Objects-normal/arm64/GeneratedAssetSymbols.d",
+    "diagnostics" : "/Users/anuragsingh/Documents/musiccuration/build/Build/Intermediates.noindex/musiccuration.build/Debug-iphonesimulator/MusicWidgetExtension.build/Objects-normal/arm64/GeneratedAssetSymbols.dia",
+    "index-unit-output-path" : "/musiccuration.build/Debug-iphonesimulator/MusicWidgetExtension.build/Objects-normal/arm64/GeneratedAssetSymbols.o",
+    "llvm-bc" : "/Users/anuragsingh/Documents/musiccuration/build/Build/Intermediates.noindex/musiccuration.build/Debug-iphonesimulator/MusicWidgetExtension.build/Objects-normal/arm64/GeneratedAssetSymbols.bc",
+    "object" : "/Users/anuragsingh/Documents/musiccuration/build/Build/Intermediates.noindex/musiccuration.build/Debug-iphonesimulator/MusicWidgetExtension.build/Objects-normal/arm64/GeneratedAssetSymbols.o",
+    "swift-dependencies" : "/Users/anuragsingh/Documents/musiccuration/build/Build/Intermediates.noindex/musiccuration.build/Debug-iphonesimulator/MusicWidgetExtension.build/Objects-normal/arm64/GeneratedAssetSymbols.swiftdeps",
+    "swiftmodule" : "/Users/anuragsingh/Documents/musiccuration/build/Build/Intermediates.noindex/musiccuration.build/Debug-iphonesimulator/MusicWidgetExtension.build/Objects-normal/arm64/GeneratedAssetSymbols~partial.swiftmodule"
+  },
+  "/Users/anuragsingh/Documents/musiccuration/musiccuration/Components/VinylDisc.swift" : {
+    "const-values" : "/Users/anuragsingh/Documents/musiccuration/build/Build/Intermediates.noindex/musiccuration.build/Debug-iphonesimulator/MusicWidgetExtension.build/Objects-normal/arm64/VinylDisc.swiftconstvalues",
+    "dependencies" : "/Users/anuragsingh/Documents/musiccuration/build/Build/Intermediates.noindex/musiccuration.build/Debug-iphonesimulator/MusicWidgetExtension.build/Objects-normal/arm64/VinylDisc.d",
+    "diagnostics" : "/Users/anuragsingh/Documents/musiccuration/build/Build/Intermediates.noindex/musiccuration.build/Debug-iphonesimulator/MusicWidgetExtension.build/Objects-normal/arm64/VinylDisc.dia",
+    "index-unit-output-path" : "/musiccuration.build/Debug-iphonesimulator/MusicWidgetExtension.build/Objects-normal/arm64/VinylDisc.o",
+    "llvm-bc" : "/Users/anuragsingh/Documents/musiccuration/build/Build/Intermediates.noindex/musiccuration.build/Debug-iphonesimulator/MusicWidgetExtension.build/Objects-normal/arm64/VinylDisc.bc",
+    "object" : "/Users/anuragsingh/Documents/musiccuration/build/Build/Intermediates.noindex/musiccuration.build/Debug-iphonesimulator/MusicWidgetExtension.build/Objects-normal/arm64/VinylDisc.o",
+    "swift-dependencies" : "/Users/anuragsingh/Documents/musiccuration/build/Build/Intermediates.noindex/musiccuration.build/Debug-iphonesimulator/MusicWidgetExtension.build/Objects-normal/arm64/VinylDisc.swiftdeps",
+    "swiftmodule" : "/Users/anuragsingh/Documents/musiccuration/build/Build/Intermediates.noindex/musiccuration.build/Debug-iphonesimulator/MusicWidgetExtension.build/Objects-normal/arm64/VinylDisc~partial.swiftmodule"
+  },
+  "/Users/anuragsingh/Documents/musiccuration/musiccuration/Models/MusicModels.swift" : {
+    "const-values" : "/Users/anuragsingh/Documents/musiccuration/build/Build/Intermediates.noindex/musiccuration.build/Debug-iphonesimulator/MusicWidgetExtension.build/Objects-normal/arm64/MusicModels.swiftconstvalues",
+    "dependencies" : "/Users/anuragsingh/Documents/musiccuration/build/Build/Intermediates.noindex/musiccuration.build/Debug-iphonesimulator/MusicWidgetExtension.build/Objects-normal/arm64/MusicModels.d",
+    "diagnostics" : "/Users/anuragsingh/Documents/musiccuration/build/Build/Intermediates.noindex/musiccuration.build/Debug-iphonesimulator/MusicWidgetExtension.build/Objects-normal/arm64/MusicModels.dia",
+    "index-unit-output-path" : "/musiccuration.build/Debug-iphonesimulator/MusicWidgetExtension.build/Objects-normal/arm64/MusicModels.o",
+    "llvm-bc" : "/Users/anuragsingh/Documents/musiccuration/build/Build/Intermediates.noindex/musiccuration.build/Debug-iphonesimulator/MusicWidgetExtension.build/Objects-normal/arm64/MusicModels.bc",
+    "object" : "/Users/anuragsingh/Documents/musiccuration/build/Build/Intermediates.noindex/musiccuration.build/Debug-iphonesimulator/MusicWidgetExtension.build/Objects-normal/arm64/MusicModels.o",
+    "swift-dependencies" : "/Users/anuragsingh/Documents/musiccuration/build/Build/Intermediates.noindex/musiccuration.build/Debug-iphonesimulator/MusicWidgetExtension.build/Objects-normal/arm64/MusicModels.swiftdeps",
+    "swiftmodule" : "/Users/anuragsingh/Documents/musiccuration/build/Build/Intermediates.noindex/musiccuration.build/Debug-iphonesimulator/MusicWidgetExtension.build/Objects-normal/arm64/MusicModels~partial.swiftmodule"
+  }
+}

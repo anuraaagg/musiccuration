@@ -6,7 +6,40 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		6073CD682EDD856400F3B3A6 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6073CD672EDD856400F3B3A6 /* WidgetKit.framework */; };
+		6073CD6A2EDD856400F3B3A6 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6073CD692EDD856400F3B3A6 /* SwiftUI.framework */; };
+		6073CD792EDD856600F3B3A6 /* MusicWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 6073CD652EDD856400F3B3A6 /* MusicWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		6073CD772EDD856600F3B3A6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 60E4461B2ED5CCBF0074CA77 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 6073CD642EDD856400F3B3A6;
+			remoteInfo = MusicWidgetExtension;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		6073CD7E2EDD856600F3B3A6 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				6073CD792EDD856600F3B3A6 /* MusicWidgetExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		6073CD652EDD856400F3B3A6 /* MusicWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = MusicWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		6073CD672EDD856400F3B3A6 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		6073CD692EDD856400F3B3A6 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		60E446232ED5CCBF0074CA77 /* musiccuration.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = musiccuration.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -18,13 +51,38 @@
 			);
 			target = 60E446222ED5CCBF0074CA77 /* musiccuration */;
 		};
+		6073CD7D2EDD856600F3B3A6 /* Exceptions for "MusicWidget" folder in "MusicWidgetExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 6073CD642EDD856400F3B3A6 /* MusicWidgetExtension */;
+		};
+		6073CD822EDD878F00F3B3A6 /* Exceptions for "musiccuration" folder in "MusicWidgetExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Assets.xcassets,
+				Components/VinylDisc.swift,
+				Models/MusicModels.swift,
+			);
+			target = 6073CD642EDD856400F3B3A6 /* MusicWidgetExtension */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		6073CD6B2EDD856400F3B3A6 /* MusicWidget */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				6073CD7D2EDD856600F3B3A6 /* Exceptions for "MusicWidget" folder in "MusicWidgetExtension" target */,
+			);
+			path = MusicWidget;
+			sourceTree = "<group>";
+		};
 		60E446252ED5CCBF0074CA77 /* musiccuration */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				6022C6962ED95F81005F5DBF /* Exceptions for "musiccuration" folder in "musiccuration" target */,
+				6073CD822EDD878F00F3B3A6 /* Exceptions for "musiccuration" folder in "MusicWidgetExtension" target */,
 			);
 			path = musiccuration;
 			sourceTree = "<group>";
@@ -32,6 +90,15 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		6073CD622EDD856400F3B3A6 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6073CD6A2EDD856400F3B3A6 /* SwiftUI.framework in Frameworks */,
+				6073CD682EDD856400F3B3A6 /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		60E446202ED5CCBF0074CA77 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -42,10 +109,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6073CD662EDD856400F3B3A6 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				6073CD672EDD856400F3B3A6 /* WidgetKit.framework */,
+				6073CD692EDD856400F3B3A6 /* SwiftUI.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		60E4461A2ED5CCBF0074CA77 = {
 			isa = PBXGroup;
 			children = (
 				60E446252ED5CCBF0074CA77 /* musiccuration */,
+				6073CD6B2EDD856400F3B3A6 /* MusicWidget */,
+				6073CD662EDD856400F3B3A6 /* Frameworks */,
 				60E446242ED5CCBF0074CA77 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -54,6 +132,7 @@
 			isa = PBXGroup;
 			children = (
 				60E446232ED5CCBF0074CA77 /* musiccuration.app */,
+				6073CD652EDD856400F3B3A6 /* MusicWidgetExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -61,6 +140,28 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		6073CD642EDD856400F3B3A6 /* MusicWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6073CD7A2EDD856600F3B3A6 /* Build configuration list for PBXNativeTarget "MusicWidgetExtension" */;
+			buildPhases = (
+				6073CD612EDD856400F3B3A6 /* Sources */,
+				6073CD622EDD856400F3B3A6 /* Frameworks */,
+				6073CD632EDD856400F3B3A6 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				6073CD6B2EDD856400F3B3A6 /* MusicWidget */,
+			);
+			name = MusicWidgetExtension;
+			packageProductDependencies = (
+			);
+			productName = MusicWidgetExtension;
+			productReference = 6073CD652EDD856400F3B3A6 /* MusicWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		60E446222ED5CCBF0074CA77 /* musiccuration */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 60E4462E2ED5CCC10074CA77 /* Build configuration list for PBXNativeTarget "musiccuration" */;
@@ -68,10 +169,12 @@
 				60E4461F2ED5CCBF0074CA77 /* Sources */,
 				60E446202ED5CCBF0074CA77 /* Frameworks */,
 				60E446212ED5CCBF0074CA77 /* Resources */,
+				6073CD7E2EDD856600F3B3A6 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				6073CD782EDD856600F3B3A6 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				60E446252ED5CCBF0074CA77 /* musiccuration */,
@@ -93,6 +196,9 @@
 				LastSwiftUpdateCheck = 2610;
 				LastUpgradeCheck = 2610;
 				TargetAttributes = {
+					6073CD642EDD856400F3B3A6 = {
+						CreatedOnToolsVersion = 26.1.1;
+					};
 					60E446222ED5CCBF0074CA77 = {
 						CreatedOnToolsVersion = 26.1.1;
 					};
@@ -113,11 +219,19 @@
 			projectRoot = "";
 			targets = (
 				60E446222ED5CCBF0074CA77 /* musiccuration */,
+				6073CD642EDD856400F3B3A6 /* MusicWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		6073CD632EDD856400F3B3A6 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		60E446212ED5CCBF0074CA77 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -128,6 +242,13 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		6073CD612EDD856400F3B3A6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		60E4461F2ED5CCBF0074CA77 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -137,7 +258,80 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		6073CD782EDD856600F3B3A6 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 6073CD642EDD856400F3B3A6 /* MusicWidgetExtension */;
+			targetProxy = 6073CD772EDD856600F3B3A6 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		6073CD7B2EDD856600F3B3A6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = SLH68RB69S;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MusicWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = MusicWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.1;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = anurag.musiccuration.MusicWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		6073CD7C2EDD856600F3B3A6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = SLH68RB69S;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = MusicWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = MusicWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.1;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = anurag.musiccuration.MusicWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
 		60E4462C2ED5CCC10074CA77 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -349,6 +543,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		6073CD7A2EDD856600F3B3A6 /* Build configuration list for PBXNativeTarget "MusicWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6073CD7B2EDD856600F3B3A6 /* Debug */,
+				6073CD7C2EDD856600F3B3A6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		60E4461E2ED5CCBF0074CA77 /* Build configuration list for PBXProject "musiccuration" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
